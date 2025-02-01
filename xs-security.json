@@ -1,0 +1,37 @@
+{
+  "xsappname": "purchase404",
+  "tenant-mode": "dedicated",
+  "description": "Security profile of called application",
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.Viewer",
+      "description": "Someone can view data only"
+    },
+    {
+      "name": "$XSAPPNAME.Admin",
+      "description": "Admin perform CRUD operation"
+    }
+  ],
+  "role-templates": [
+    {
+      "name": "Viewer",
+      "description": "View all data ",
+      "default-role-name": "Viewer: Authorized to Read all data",
+      "scope-references": [
+        "$XSAPPNAME.Viewer"
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "Performs CRUD operations",
+      "default-role-name": "super Admin",
+      "scope-references": [
+        "$XSAPPNAME.Admin"
+      ]
+    }
+  ],
+  "authorities": [
+    "$ACCEPT_GRANTED_AUTHORITIES"
+  ],
+  "attributes": []
+}

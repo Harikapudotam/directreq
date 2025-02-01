@@ -1,0 +1,90 @@
+{
+  "name": "purchase404",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": {
+    "type": "git",
+    "url": "<Add your repository here>"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@cap-js/attachments": "latest",
+    "@cap-js/hana": "^1",
+    "@cap-js/sdm": "^1.2.2",
+    "@sap-cloud-sdk/connectivity": "^3.25.0",
+    "@sap-cloud-sdk/http-client": "^3.25.0",
+    "@sap-cloud-sdk/resilience": "^3.25.0",
+    "@sap/cds": ">=8",
+    "@sap/xssec": "^4",
+    "axios": "^1.7.4",
+    "express": "^4",
+    "node-cache": "^5.1.2"
+  },
+  "devDependencies": {
+    "@cap-js/cds-types": "^0.8.0",
+    "@cap-js/sqlite": "^1",
+    "@eslint/js": "^9.4.0",
+    "@sap/cds-dk": "^8.1.2",
+    "eslint": "^9.4.0",
+    "eslint-plugin-jest": "^28.5.0",
+    "globals": "^15.3.0",
+    "jest": "^29.7.0",
+    "mbt": "^1.2.29",
+    "rimraf": "^5.0.5"
+  },
+  "peerDependencies": {
+    "@sap/cds": ">=8"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-purchase404": "cds watch --open purchase404/webapp/index.html?sap-ui-xx-viewCache=false",
+    "undeploy": "cf undeploy purchase404 --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-reqisition": "cds watch --open reqisition/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-prt": "cds watch --open prt/webapp/index.html?sap-ui-xx-viewCache=false"
+  },
+  "main": "index.js",
+  "keywords": [
+    "purchase404"
+  ],
+  "author": "Harika",
+  "cds": {
+    "sql": {
+      "native_hana_associations": false
+    },
+    "requires": {
+      "OP_API_PRODUCT_SRV_0001": {
+        "kind": "odata",
+        "model": "srv/external/OP_API_PRODUCT_SRV_0001",
+        "credentials": {
+          "destination": "S4H",
+          "path": "/sap/opu/odata/sap/API_PRODUCT_SRV"
+        }
+      },
+      "sdm": {
+        "settings": {
+          "repositoryId": "4d4ecb70-02a5-44af-bb60-fe18c9e3ef7e"
+        }
+      },
+      "bpa_destination": {
+        "kind": "rest",
+        "credentials": {
+          "destination": "WFDestination"
+        }
+      },
+      "[production]": {
+        "db": "hana",
+        "destinations": true,
+        "connectivity": true,
+        "auth": "xsuaa"
+      }
+    }
+  },
+  "sapux": [
+    "app/purchase404",
+    "app/reqisition",
+    "app/prt"
+  ]
+}

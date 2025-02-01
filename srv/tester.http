@@ -1,0 +1,13 @@
+###Get the servie document
+http://localhost:4004/odata/v4/my
+
+###
+PATCH http://localhost:4004/odata/v4/my/RequestItems(ID=eaef0f67-196c-4c10-829b-22cad3bb9fa7,itemno=10,IsActiveEntity=true)
+Content-Type: application/json
+ 
+{
+    "quantity":5
+}
+
+###Get Single PO
+POST http://localhost:4004/odata/v4/my/RequestHeaders/sendforapproval
