@@ -1,30 +1,30 @@
 namespace ust.harika;
 
 using {OP_API_PRODUCT_SRV_0001 as prod_api} from '../srv/external/OP_API_PRODUCT_SRV_0001';
+using {ust.harika} from './commons';
 using {
     Currency,
     managed
 } from '@sap/cds/common';
 
-@draft.enabled: true
 entity RequestHeaders : managed {
-    key reqno      : Integer        @readonly;
+    key reqno      : Integer @readonly;
         reqdesc    : String;
         status     : String;
         prtype     : String;
+        prnumber : Integer;
 
-        @semantics.totalprice.currencyCode: 'currency'
-        @cds.aggregate                    : 'sum(netprice)'
-        totalprice : Decimal(10, 2) @readonly;
-        currency   : Currency;
+        // @semantics.totalprice.currencyCode: 'currency'
+        // @cds.aggregate                    : 'sum(netprice)'
+        Currency: Currency;
+        totalprice : harika.AmountT @readonly;
+        //currency_code   : String;
         items      : Composition of many RequestItems
                          on items.RequestHeaders = $self;
 }
-
-@draft.enabled: true
 entity RequestItems : managed {
     key ID             : UUID;
-        itemno         : Integer;
+        itemno         : Integer @readonly;
         reqno          : Integer;
         RequestHeaders : Association to RequestHeaders;
         itemdescr      : String;
@@ -32,7 +32,7 @@ entity RequestItems : managed {
         material       : Association to Materials;
         quantity       : Integer;
         unitprice      : Integer;
-        netprice       : Decimal(10, 2) @readonly;
+        netprice       : Integer @readonly;
         uom            : String;
         plant          : Association to Plants;
 }

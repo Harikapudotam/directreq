@@ -1,14 +1,3 @@
-// sap.ui.define([
-//     "sap/m/MessageToast"
-// ], function(MessageToast) {
-//     'use strict';
-
-//     return {
-//         _onapproval: function(oEvent) {
-//             MessageToast.show("Custom handler invoked.");
-//         }
-//     };
-// });
 sap.ui.define([
     "sap/m/MessageToast"
 ], function(MessageToast) {
@@ -18,48 +7,48 @@ sap.ui.define([
         onInit: function() {
             var oModel = this.getView().getModel();
             var oContext = this.getModel().getBindingContext();
-            
+           
             if (oContext) {
                 var sStatus = oContext.getProperty("status");
                 this._updateActionButton(sStatus);
             }
         },
-        
+       
         onAfterRendering: function() {
             var oModel = this.getView().getModel();
             var oContext = this.getView().getBindingContext();
-            
+           
             if (oContext) {
                 var sStatus = oContext.getProperty("status");
                 this._updateActionButton(sStatus);
             }
         },
-        
+       
         _updateActionButton: function(sStatus) {
             var startupParameters = this.getOwnerComponent().getComponentData().startupParameters;
-            
+           
             if (!startupParameters || !startupParameters.inboxAPI) {
                 console.error("Inbox API not available");
                 return;
             }
-        
+       
             if (sStatus === "Approved" || sStatus === "saved") {
                 startupParameters.inboxAPI.disableAction("APPROVE");
             } else {
                 startupParameters.inboxAPI.enableAction("APPROVE");
             }
         },
-        
-
-
-
-
-
-
+       
+ 
+ 
+ 
+ 
+ 
+ 
         _onapproval: function(oEvent) {
            
-
-
+ 
+ 
             var that = this;
             var oDataModel = this.getBindingContext().getModel()
             console.log(oDataModel);
@@ -76,9 +65,9 @@ sap.ui.define([
                 contentType: "application/json",
                 success: function (json) {
                     MessageToast.show("approval send");
-                    // window.location.reload(); 
+                    // window.location.reload();
                     that.getBindingContext().refresh()
-                    // refreshing the model 
+                    // refreshing the model
                     that.getModel().refresh()
                 },
                 error: function (error) {

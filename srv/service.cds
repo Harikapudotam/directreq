@@ -5,7 +5,8 @@ service MyService {
     entity RequestHeaders @(odata.draft.enabled: true ) as projection on harika.RequestHeaders
      actions{
         action sendforapproval();
-        action responsefrombpa(status : String , ID : UUID) ;
+        action responsefrombpa(status : String , reqno : Integer) ;
+        action rejected(status: String , reqno : Integer);
     };
     entity RequestItems   as projection on harika.RequestItems;
     entity Materials      as projection on harika.Materials;
