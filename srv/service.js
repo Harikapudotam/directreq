@@ -1,54 +1,46 @@
 const cds = require('@sap/cds');
+const axios = require('axios');
+const { executeHttpRequest } = require('@sap-cloud-sdk/http-client');
+ const { destination } = require('@sap/xsenv');
 module.exports = cds.service.impl(async function (srv) {
   const prod_api = await cds.connect.to('OP_API_PRODUCT_SRV_0001');
-  const { Materials, RequestHeaders, Plants, RequestItems, RequestItems_drafts, RequestHeaders_drafts , attachments } = srv.entities;
+  const plant_api = await cds.connect.to('API_PLANT_SRV');
+  const { Materials, RequestHeaders, Plants, RequestItems} = srv.entities;
   srv.on("READ", Plants, async (req) => {
     try {
-      // Add filtering to the query
-      req.query.where("Product <> '' ");
-      req.query.SELECT.count = false; // Ensuring no count is added to the query
-
-      // Log the query being executed for debugging
+      req.query.where("Plant <> '' ");
+      req.query.SELECT.count = false; 
       console.log("Running query:");
-
-      // Send the query to the destination
-      const response = await prod_api.run(req.query);
-
-      // Log the response from the destination (or error if not received)
-      console.log("Response from prod_api:");
-
+      const response = await plant_api.run(req.query);
+      console.log("Response from plant_api:");
       return response;
-
     } catch (error) {
-      // Log and handle any errors during the process
       console.error("Error occurred while querying the external service:", error);
-
-      // Optionally, you can rethrow or handle the error as needed
       throw new Error("Failed to retrieve data from the external service.");
     }
   });
   srv.on("READ", Materials, async (req) => {
     try {
-      // Add filtering to the query
+      
       req.query.where("Product <> '' ");
-      req.query.SELECT.count = false; // Ensuring no count is added to the query
+      req.query.SELECT.count = false; 
 
-      // Log the query being executed for debugging
+      
       console.log("Running query:");
 
-      // Send the query to the destination
+      
       const response = await prod_api.run(req.query);
 
-      // Log the response from the destination (or error if not received)
+     
       console.log("Response from prod_api:");
 
       return response;
 
     } catch (error) {
-      // Log and handle any errors during the process
+      
       console.error("Error occurred while querying the external service:", error);
 
-      // Optionally, you can rethrow or handle the error as needed
+      
       throw new Error("Failed to retrieve data from the external service.");
     }
   });
@@ -68,9 +60,6 @@ module.exports = cds.service.impl(async function (srv) {
 
 
   });
-
-  
-
   srv.before('NEW','RequestHeaders.drafts' , async (req) => {
     console.log("drafts herer");
     const { maxNumber } = await SELECT.one`max(reqno) as maxNumber`.from(RequestHeaders.drafts);
@@ -82,39 +71,39 @@ module.exports = cds.service.impl(async function (srv) {
     req.data.reqno = iNewNo;
   });
 
-//   srv.before('CREATE', RequestItems, async (req) => {
-//     const { reqno } = req.data;  // Get the reqno of the RequestHeader
-//     console.log('here ',reqno);
+  srv.before('CREATE', RequestItems, async (req) => {
+    const { reqno } = req.data;  // Get the reqno of the RequestHeader
+    console.log('here ',reqno);
 
-//     // Fetch the highest itemno for the given reqno
-//     const result = await cds.transaction(req).run(
-//         SELECT.one.from(RequestItems)
-//             .where({ RequestHeaders_reqno : req.data })
-//             .orderBy({ itemno: 'desc' })  // Get the highest itemno
-//     );
-//     // If there are existing items, increment the highest itemno by 1
-//     const nextItemNo = !maxNumber ? 10 : Number(maxNumber) + 10 ;  // Start from 1 if no items exist
+    // Fetch the highest itemno for the given reqno
+    const result = await cds.transaction(req).run(
+        SELECT.one.from(RequestItems)
+            .where({ RequestHeaders_reqno : req.data })
+            .orderBy({ itemno: 'desc' })  // Get the highest itemno
+    );
+    // If there are existing items, increment the highest itemno by 1
+    const nextItemNo = !maxNumber ? 10 : Number(maxNumber) + 10 ;  // Start from 1 if no items exist
   
-//     // Assign the next available itemno to the new RequestItem
-//     req.data.itemno = nextItemNo;
-// });
-// srv.before('NEW', 'RequestItems.drafts',async (req) => {
-//   const { reqno } = req.data;  // Get the reqno of the RequestHeader
+    // Assign the next available itemno to the new RequestItem
+    req.data.itemno = nextItemNo;
+});
+srv.before('NEW', 'RequestItems.drafts',async (req) => {
+  const { reqno } = req.data;  // Get the reqno of the RequestHeader
 
-//   // Fetch the highest itemno for the given reqno
-//   const result = await cds.transaction(req).run(
-//       SELECT.one.from(RequestItems.drafts)
-//           .where({ RequestHeaders_reqno : reqno })
-//           .orderBy({ itemno: 'desc' })  // Get the highest itemno
-//   );
-//   const { maxNumber } = await SELECT.one`max(itemno) as maxNumber`.from(RequestItems.drafts).where({ RequestHeaders_reqno : reqno });
-//   console.log('heter ',maxNumber);
-//   // If there are existing items, increment the highest itemno by 1
-//   const nextItemNo = !maxNumber ? 10 : Number(maxNumber) + 10 ;  // Start from 1 if no items exist
+  // Fetch the highest itemno for the given reqno
+  const result = await cds.transaction(req).run(
+      SELECT.one.from(RequestItems.drafts)
+          .where({ RequestHeaders_reqno : reqno })
+          .orderBy({ itemno: 'desc' })  // Get the highest itemno
+  );
+  const { maxNumber } = await SELECT.one`max(itemno) as maxNumber`.from(RequestItems.drafts).where({ RequestHeaders_reqno : reqno });
+  console.log('heter ',maxNumber);
+  // If there are existing items, increment the highest itemno by 1
+  const nextItemNo = !maxNumber ? 10 : Number(maxNumber) + 10 ;  // Start from 1 if no items exist
 
-//   // Assign the next available itemno to the new RequestItem
-//   req.data.itemno = nextItemNo;
-// });
+  // Assign the next available itemno to the new RequestItem
+  req.data.itemno = nextItemNo;
+});
   srv.before(['CREATE','UPDATE','DELETE'], RequestHeaders, async (req) => {
     // Check if items are part of the payload
 
@@ -184,51 +173,51 @@ module.exports = cds.service.impl(async function (srv) {
     const destinationUrl = 'https://ustcpi.test.apimanagement.us10.hana.ondemand.com:443/direct/requisition';
 
     // Define the headers (no authorization required)
-    const headers = {
-      'Content-Type': 'application/json',
-    };
+    // const headers = {
+    //   'Content-Type': 'application/json',
+    // };
 
-    const payload = {
-      reqdesc: payload_bpa_header[0]?.reqdesc,
-      reqtype: 'NB',
-      items: [payload_bpa_items.map(items => (
-        {
-          itemno: items.itemno,
-          itemdescr: items.itemdescr,
-          PurchasingGroup: '001',
-          quantity: items.quantity,
-          unitprice: '2',
-          netprice: '2345',
-          material: 'MTAMC4',
-          uom: 'EA',
-          plant: 'MT01',
-        }
-      ))
-      ],
-    };
+    // const payload = {
+    //   reqdesc: payload_bpa_header[0]?.reqdesc,
+    //   reqtype: 'NB',
+    //   items: [payload_bpa_items.map(items => (
+    //     {
+    //       itemno: items.itemno,
+    //       itemdescr: items.itemdescr,
+    //       PurchasingGroup: '001',
+    //       quantity: items.quantity,
+    //       unitprice: '2',
+    //       netprice: '2345',
+    //       material: 'MTAMC4',
+    //       uom: 'EA',
+    //       plant: 'MT01',
+    //     }
+    //   ))
+    //   ],
+    // };
 
-    try {
-      // Make the POST request to the iFlow
-      const response = await axios.post(destinationUrl, payload, { headers });
+    // try {
+    //   // Make the POST request to the iFlow
+    //   const response = await axios.post(destinationUrl, payload, { headers });
 
-      console.log('iFlow triggered successfully:', response.data);
-    } catch (error) {
-      console.error('Error triggering iFlow:', error.message);
-      throw new Error('Failed to trigger iFlow');
-    }
+    //   console.log('iFlow triggered successfully:', response.data);
+    // } catch (error) {
+    //   console.error('Error triggering iFlow:', error.message);
+    //   throw new Error('Failed to trigger iFlow');
+    // }
 
 
       await UPDATE(RequestHeaders)
-      .with({ status: 'X' , insertrestrictions: 1})
+      .with({ status: 'approved' , insertrestrictions: 1})
       .where({ reqno: req.data.reqno });
  
-    };
-    await UPDATE(RequestHeaders)
-      .with({ prnumber: response.data.PurchaseRequisition })
-      .where({ reqno: req.data.reqno });
+    // };
+    // await UPDATE(RequestHeaders)
+    //   .with({ prnumber: response.data.PurchaseRequisition })
+    //   .where({ reqno: req.data.reqno });
  
     
-
+    }
   });
   srv.on('rejected',async(req)=>{
     console.log(req.data.status);
@@ -241,4 +230,52 @@ module.exports = cds.service.impl(async function (srv) {
         .where({ reqno: req.data.reqno });
     }
   })
-})
+
+  //local testing for IFLOW
+  srv.on('triggerIFlow',async(req)=>{
+    const destinationName = 'iflow'; 
+        const payload = {
+            "RequestHeaders": {
+                "prtype": "NB",
+                "reqdesc": "Office Supplies Purchase2",
+                "items": {
+                    "RequestItems": [
+                        {
+                            "itemno": 2,
+                            "itemdescr": "Pens Pack",
+                            "prgroup": "002",
+                            "material_MID": "MTAMC4",
+                            "quantity": 10,
+                            "unitprice": "2",
+                            "netprice": "2345",
+                            "uom": "EA",
+                            "plant_Product": "MT01"
+                        }
+                    ]
+                }
+            }
+        };
+
+        try {
+            // Trigger the iFlow via destination service
+            const response = await executeHttpRequest(
+                { destinationName },
+                {
+                    method: 'POST',
+                    url: '/http/Direct/Requisition', // Ensure this path is correct
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    data: payload
+                }
+            );
+
+            console.log('iFlow triggered successfully:', response.data);
+            return response.data;
+
+        } catch (error) {
+            console.error('Error triggering iFlow:', error.message);
+            req.error(500, `Failed to trigger iFlow: ${error.message}`);
+        }
+    });
+});

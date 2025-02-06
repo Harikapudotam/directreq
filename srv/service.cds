@@ -7,6 +7,7 @@ service MyService {
         action sendforapproval();
         action responsefrombpa(status : String , reqno : Integer) ;
         action rejected(status: String , reqno : Integer);
+        
     };
     entity RequestItems   as projection on harika.RequestItems;
     entity Materials      as projection on harika.Materials;
@@ -17,7 +18,7 @@ service MyService {
     //action sendforapproval(reqno: Integer, IsActiveEntity: Boolean) on RequestHeaders returns String;
     // action sendforapproval(reqno: Integer, IsActiveEntity: Boolean) on MyService.RequestHeaders returns String;
 
-    
+        
     
 
     

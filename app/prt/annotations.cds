@@ -5,6 +5,12 @@ annotate service.RequestHeaders @(
         'Approved'
     ]}},
 
+    UI.DeleteHidden   : {$edmJson: {$Eq: [
+        {$Path: 'status'},
+        'Approved'
+    ]}},
+    
+
     UI.SelectionFields: [
         reqdesc,
         reqno,
@@ -51,6 +57,11 @@ annotate service.RequestHeaders @(
             Label: 'Material',
             Value: items.material_MID,
         },
+        {
+            $Type: 'UI.DataField',
+            Label: 'PR',
+            Value: prnumber,
+        },
     ],
 
     UI.HeaderInfo     : {
@@ -67,12 +78,7 @@ annotate service.RequestHeaders @(
                 $Type : 'UI.ReferenceFacet',
                 Label : 'Item Details',
                 Target: '@UI.Identification'
-            },
-            // {
-            //     $Type : 'UI.ReferenceFacet',
-            //     Label: 'Status Details',
-            //     Target : '@UI.FieldGroup#Spiderman'
-            // },
+            }
             ],
         },
         {
@@ -82,6 +88,7 @@ annotate service.RequestHeaders @(
         },
     ],
     UI.Identification : [
+        
 
         // {
         //     $Type      : 'UI.DataFieldForAction',
@@ -121,9 +128,18 @@ annotate service.RequestHeaders @(
         },
         {
             $Type: 'UI.DataField',
+            Value: modifiedBy,
+        },
+        {
+            $Type: 'UI.DataField',
             Label: 'Status',
             Value: status,
-        }
+        },
+        {
+            $Type: 'UI.DataField',
+            Label: 'PR',
+            Value: prnumber,
+        },
     ],
 // UI.FieldGroup #Spiderman: {
 //Label : 'PO pricing',
@@ -214,7 +230,7 @@ annotate service.RequestItems with @(
         {
             $Type: 'UI.DataField',
             Label: 'Plant',
-            Value: plant_Product,
+            Value: plant_Plant,
         }
     ],
 
@@ -234,6 +250,7 @@ annotate service.RequestItems with @(
         ],
     }, ],
     UI.Identification: [
+        
         {
             $Type: 'UI.DataField',
             Label: 'Item Number',
@@ -281,7 +298,7 @@ annotate service.RequestItems with @(
         {
             $Type: 'UI.DataField',
             Label: 'Plant',
-            Value: plant_Product,
+            Value: plant_Plant,
         }
     ],
 // UI.FieldGroup #Spiderman: {
@@ -387,8 +404,8 @@ annotate service.RequestItems {
                 ValueListProperty: 'MID'
             }, ]
         },
-        Common.Text                    : material_MID,
-        Common.ValueListWithFixedValues: true,
+        // Common.Text                    : material_MID,
+        // Common.ValueListWithFixedValues: true,
     )
 
 };
@@ -400,12 +417,12 @@ annotate service.RequestItems {
             Label         : '',
             Parameters    : [{
                 $Type            : 'Common.ValueListParameterInOut',
-                LocalDataProperty: 'plant_Product',
-                ValueListProperty: 'Product'
+                LocalDataProperty: 'plant_Plant',
+                ValueListProperty: 'Plant' 
             }, ]
         },
-        Common.Text                    : plant_Product,
-        Common.ValueListWithFixedValues: true,
+        // Common.Text                    : plant_Plant,
+        // Common.ValueListWithFixedValues: true,
     )
 
 };
@@ -427,3 +444,20 @@ annotate service.RequestItems {
 //         TargetProperties : ['totalprice']
 //     }
 // });
+
+// annotate service.RequestHeaders with actions{  sendforapproval @Core.OperationAvailable: {  $edmJson: {$Gt: [{$Path: 'in/status'}, 'Waiting']}};
+  
+// };
+
+// annotate service.RequestHeaders with actions{  sendforapproval @Core.OperationAvailable: disableUpdation;
+// //   ta_lr_inlineIconAction  @Core.OperationAvailable: {    $edmJson: {$Gt: [{$Path: 'totalAmount'}, 1000]}};
+// //   ta_lr_toolbarAction @Core.OperationAvailable: disableUpdation;
+// };
+// annotate service.RequestHeaders with @(UI.Identification : [ 
+//   {
+//     $Type : 'UI.DataFieldForAction', 
+//     Label : 'Set to In Process', 
+//     Action : 'MyService.EntityContainer/responsefrombpa', 
+//     ![@UI.Hidden] : {$edmJson : {$Ne : [{$Path : 'status'}, 'approved']}} 
+//   }, 
+// ]);

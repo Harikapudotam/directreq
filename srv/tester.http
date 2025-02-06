@@ -10,4 +10,4 @@ Content-Type: application/json
 }
 
 ###Get Single PO
-POST http://localhost:4004/odata/v4/my/RequestHeaders/sendforapproval
+POST http://localhost:4004/odata/v4/my/triggerIFlow
