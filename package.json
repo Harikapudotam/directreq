@@ -9,17 +9,21 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@cap-js/change-tracking": "^1.0.7",
     "@cap-js/hana": "^1",
     "@cap-js/sdm": "^1.2.2",
     "@sap-cloud-sdk/connectivity": "^3.25.0",
     "@sap-cloud-sdk/core": "^1.54.2",
     "@sap-cloud-sdk/http-client": "^3.25.0",
     "@sap-cloud-sdk/resilience": "^3.25.0",
-    "@sap/cds": ">=8",
+    "@sap/cds": "8.6.0",
+    "@sap/cloud-sdk-core": "^1.17.2",
+    "@sap/cloud-sdk-vdm": "^1.21.0",
     "@sap/xssec": "^4",
     "axios": "^1.7.4",
     "express": "^4",
-    "node-cache": "^5.1.2"
+    "node-cache": "^5.1.2",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@cap-js/cds-types": "^0.8.0",
@@ -33,9 +37,6 @@
     "mbt": "^1.2.29",
     "rimraf": "^5.0.5"
   },
-  "peerDependencies": {
-    "@sap/cds": ">=8"
-  },
   "scripts": {
     "start": "cds-serve",
     "watch-purchase404": "cds watch --open purchase404/webapp/index.html?sap-ui-xx-viewCache=false",
@@ -43,7 +44,8 @@
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
     "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
     "watch-reqisition": "cds watch --open reqisition/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-prt": "cds watch --open prt/webapp/index.html?sap-ui-xx-viewCache=false"
+    "watch-prt": "cds watch --open prt/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-wpage": "cds watch --open wpage/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "main": "index.js",
   "keywords": [
@@ -62,6 +64,9 @@
           "destination": "S4H",
           "path": "/sap/opu/odata/sap/API_PRODUCT_SRV"
         }
+      },
+      "change-tracking": {
+        "impl": "@cap-js/change-tracking"
       },
       "API_PLANT_SRV": {
         "kind": "odata",
@@ -99,6 +104,7 @@
   "sapux": [
     "app/purchase404",
     "app/reqisition",
-    "app/prt"
+    "app/prt",
+    "app/wpage"
   ]
 }

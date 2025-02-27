@@ -1,0 +1,5 @@
+ID,reqno,reqdesc,status,prtype,prnumber,Currency_code,totalprice
+165a2547-c132-4ede-a463-03002a055fbe,1001,Header 1,Saved,NB1,1234,IND,1200
+7284ea0a-3bdd-4e1d-9f11-7a9f81b45705,1002,Header 2,Inapproval,NB2,1234,USD,1300
+158f70e4-132c-4643-9e49-31ef208ef17c,1003,Header 3,Rejected,PG2,1234,USD,10000
+2c400b80-dcce-445e-a05e-c0fd63c88813,1004,Header 4,Progress,PGT,1234,USD,1500

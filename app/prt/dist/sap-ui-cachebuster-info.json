@@ -1,13 +1,14 @@
 {
+  "ext/fragment/Comments.js.map": 1740634987691,
   "Component.js": 1738185284333,
-  "manifest.json": 1738860929963,
-  "ext/controller/Sendforapproval.js": 1738493551594,
+  "manifest.json": 1740634987539,
+  "ext/fragment/Comments.js": 1739858126259,
+  "ext/fragment/Comments-dbg.js": 1739858126259,
   "i18n/i18n.properties": 1738185286217,
   "Component-dbg.js": 1738185284333,
-  "Component.js.map": 1738860930080,
-  "ext/controller/Sendforapproval-dbg.js": 1738493551594,
-  "ext/controller/Sendforapproval.js.map": 1738860930092,
-  "Component-preload.js": 1738860930150,
-  "Component-preload.js.map": 1738860930150,
+  "Component.js.map": 1740634987687,
+  "Component-preload.js": 1740634987778,
+  "Component-preload.js.map": 1740634987778,
+  "ext/fragment/Comments.fragment.xml": 1739858002404,
   "index.html": 1738185284333
 }

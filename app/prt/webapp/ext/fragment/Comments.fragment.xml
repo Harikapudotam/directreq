@@ -1,0 +1,41 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:macros="sap.fe.macros"
+	xmlns:mvc="sap.ui.core.mvc"
+    xmlns:semantic="sap.f.semantic"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout">
+	
+
+	<l:VerticalLayout id="_IDGenVerticalLayout2" width="100%" core:require="{ handler: 'ust/prt/ext/fragment/Comments'}">
+        <!-- Existing Panel -->
+        <Panel id="_IDGenPanel2"
+            backgroundDesign="Transparent"
+            headerText="">
+            <!-- Add your content here -->
+        </Panel>
+
+        <!-- Comments Panel -->
+        <Panel id="_IDGenPanel3"
+            backgroundDesign="Transparent"
+            headerText="{i18n>Comments}">
+            <content>
+                <!-- Input for Adding Comments -->
+                <FeedInput id="_IDGenFeedInput1" post="handler.onPost" visible="{ui>/isEditable}"/>
+                
+                <!-- List for Displaying Comments -->
+                <List
+                    id="idCommentsList1"
+                    noDataText="{i18n>NoData}"
+                    showSeparators="Inner"
+                    items="{_Comments}">
+                    <!-- Template for Each Comment -->
+                    <FeedListItem 
+                        id="idfeedlistitem1"
+                        text="{text}"/>
+                </List>
+                
+            </content>
+        </Panel>
+    </l:VerticalLayout>
+
+
+</core:FragmentDefinition>

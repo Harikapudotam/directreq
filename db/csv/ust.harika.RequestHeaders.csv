@@ -1,5 +1,0 @@
-reqno,reqdesc,status,totalprice,currency_code
-101,products,saved,5000,INR
-102,Books,Waiting,1000,INR
-103,Computers,Approved,15000,INR
-104,Tables,Created,20000,INR

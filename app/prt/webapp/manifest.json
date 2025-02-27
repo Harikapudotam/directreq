@@ -154,17 +154,15 @@
                 }
               },
               "content": {
-                "header": {
-                  "actions": {
-                    "sendforapproval": {
-                      "press": "ust.prt.ext.controller.Sendforapproval._onapproval",
-                      "visible": true,
-                      "enabled": true,
-                      "text": "sendforapproval",
+                "body": {
+                  "sections": {
+                    "Comments": {
+                      "template": "ust.prt.ext.fragment.Comments",
                       "position": {
-                        "anchor": "DeleteAction",
-                        "placement": "After"
-                      }
+                        "placement": "After",
+                        "anchor": "items::LineItem"
+                      },
+                      "title": "Comments"
                     }
                   }
                 }
